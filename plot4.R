@@ -7,6 +7,8 @@ mydata <- read.table(pipe('grep "^[1-2]/2/2007" "household_power_consumption.txt
                      sep = ";", na.strings = "?", stringsAsFactors = FALSE)
 mydata <- transform(mydata, timestamp=as.POSIXct(paste(V1, V2), 
                                                  format="%d/%m/%Y %H:%M:%S"))
+# Opening device.
+png("plot4.png")
 # Changing par() so that we can plot 4 graphs at once.
 par(mfcol = c(2,2))
 # plot2.R
@@ -19,12 +21,11 @@ lines(mydata$timestamp, y = mydata$V7)
 lines(mydata$timestamp, y = mydata$V8, col = "red")
 lines(mydata$timestamp, y = mydata$V9, col = "blue")
 legend("topright",legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"),
-       lty=1 , col = c("black", "red", "blue"), bty = "n", cex = 0.5)
+       lty=1 , col = c("black", "red", "blue"), bty = "n")
 # Creating two needed plots.
 plot(mydata$timestamp, mydata$V5, type = "l", xlab = "datetime",
      ylab = "Voltage")
 plot(mydata$timestamp, mydata$V4, type = "l", xlab = "datetime",
      ylab = "Global_reactive_power")
-# Copying to a png file and closing the connection.
-dev.copy(png, file = "plot4.png", width = 480, height = 480)
+# Closing device.
 dev.off()
